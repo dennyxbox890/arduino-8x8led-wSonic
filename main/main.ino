@@ -1,27 +1,34 @@
-#include <Servo.h>
-Servo servo;
+//#include <Servo.h>
+//Servo servo;
 const int trig=10;
 const int echo=11;
-int motor_dtime=1;
+//const int serv=9;
+//int motor_dtime=1;
 long duration;
-int distance;
+long distance;
 int supersonic_func1();
 void setup() {
 	Serial.begin(9600);
     pinMode(trig,OUTPUT);
     pinMode(echo,INPUT);
-    servo.attach(9);
+    //servo.attach(serv);
 }
 
 void loop() {
-	for(int i=0;i<360;i++){
+  
+  
+  
+  
+	/*for(int i=0;i<120;i++){
         servo.write(i);
+        supersonic_func1();
         delay(motor_dtime);
     }
-    for(int i=360;i>=0;i--){
+    for(int i=120;i>=0;i--){
         servo.write(i);
+        supersonic_func1();
         delay(motor_dtime);
-    }
+    }*/
 
 }
 //https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/
@@ -38,7 +45,5 @@ int supersonic_func1(){
     */
     duration=pulseIn(echo,HIGH);
     distance= duration*0.034/2;
-// Prints the distance on the Serial Monitor
-Serial.print("Distance: ");
-Serial.println(distance);
+    Serial.println(distance);
 }

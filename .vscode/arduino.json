@@ -1,4 +1,4 @@
 {
-    "sketch": "main.ino",
+    "sketch": "main\\main.ino",
     "board": "arduino:avr:uno"
 }

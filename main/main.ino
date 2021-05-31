@@ -1,5 +1,6 @@
 #include <avr/pgmspace.h>
-
+#include <SoftwareSerial.h>
+#include <Wire.h>
 const int line[]={2,3,4,5,6,7,8,9};
 const int column[]={10,11,12,13,A0,A1,A2,A3};
 //frame using flash memory
@@ -15,9 +16,14 @@ const bool frame[8][40] PROGMEM={
 };
 double pos=0.0;
 int led_displayID=0;
+SoftwareSerial bts(A4,A5);
 void def_display();
 void bluetooh();
 void setup() {
+    Serial.begin(9600);
+    Serial.println("TEST MESSAGE");
+    //HC-05 default speed
+    bts.begin(38400);
 	for(int i=0;i<8;i++){
         pinMode(line[i],OUTPUT);
         pinMode(column[i],OUTPUT);

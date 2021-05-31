@@ -1,4 +1,5 @@
 #include <avr/pgmspace.h>
+
 const int line[]={2,3,4,5,6,7,8,9};
 const int column[]={10,11,12,13,A0,A1,A2,A3};
 //frame using flash memory
@@ -15,6 +16,7 @@ const bool frame[8][40] PROGMEM={
 double pos=0.0;
 int led_displayID=0;
 void def_display();
+void bluetooh();
 void setup() {
 	for(int i=0;i<8;i++){
         pinMode(line[i],OUTPUT);
@@ -37,13 +39,15 @@ void loop() {
 void def_display(){
     for(int l=0;l<8;l++){
         for(int c=0;c<8;c++){
-            static int frame_buf=pgm_read_byte_near(frame[c][l+(int)(floor(pos))]);
+            static int frame_buf=pgm_read_byte_near(&frame[c][l+(int)(floor(pos))]);
             if(frame_buf==1){
                 digitalWrite(line[l],HIGH);
                 digitalWrite(column[c],LOW);
-                delay(1);
+                delay(2);
                 digitalWrite(line[l],LOW);
                 digitalWrite(column[c],HIGH);
+            }else if(frame_buf==0){
+                delay(2);
             }
             pos+=0.02;
         }
@@ -52,7 +56,9 @@ void def_display(){
         pos=0.0;
     }
 }
+void bluetooth(){
 
+}
 /*int supersonic_func1(){
     digitalWrite(trig,LOW);
     delayMicroseconds(2);

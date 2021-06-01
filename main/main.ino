@@ -1,9 +1,11 @@
 #include <avr/pgmspace.h>
 #include <SoftwareSerial.h>
 #include <Wire.h>
+#include <math.h>
 const int line[]={2,3,4,5,6,7,8,9};
 const int column[]={10,11,12,13,A0,A1,A2,A3};
 //frame using flash memory
+//堅持吹毛求疵,拒絕spaghetti code
 const bool frame[8][40] PROGMEM={
     {0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     {0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0},
@@ -18,10 +20,10 @@ double pos=0.0;
 int led_displayID=0;
 SoftwareSerial bts(A4,A5);
 void def_display();
-void bluetooh();
+void bluetooth();
 void setup() {
     Serial.begin(9600);
-    Serial.println("TEST MESSAGE");
+    Serial.println("TEST MSG");
     //HC-05 default speed
     bts.begin(38400);
 	for(int i=0;i<8;i++){
@@ -36,11 +38,12 @@ void loop() {
         case 0:
             def_display();
             break;
+        case 1:
+            bluetooth();
+            break;
         default:
             break;
     }
-    
-    
 }
 void def_display(){
     for(int l=0;l<8;l++){
@@ -61,10 +64,23 @@ void def_display(){
     if(pos>=39.0){
         pos=0.0;
     }
+    if(bts.available()){
+        Serial.println("Bluetooth Connected!");
+        led_displayID=1;
+        pos=0.0;
+    }
 }
 void bluetooth(){
-
+    if(bts.available()){
+        /*do something*/
+    }else if(!bts.available()){
+        led_displayID=0;
+    }
 }
+/*END*/
+
+
+
 /*int supersonic_func1(){
     digitalWrite(trig,LOW);
     delayMicroseconds(2);
@@ -77,7 +93,7 @@ void bluetooth(){
     s=t*0.034/2
     */
     /*duration=pulseIn(echo,HIGH);
-    distance= duration*0.034/2;
+    distance=duration*0.034/2;
     Serial.println(distance);
 }*/
 /*const int frame[8][40]={

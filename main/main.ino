@@ -123,9 +123,9 @@ void sec_display(){
             }
         }
         if((8-i)<=display_bar){
-            display_bar[i][7]=1;
+            playground[i][7]=1;
         }else{
-            display_bar[i][7]=0;
+            playground[i][7]=0;
         }
     }
 }
@@ -142,8 +142,7 @@ int supersonic_func1(){
     */
     duration=pulseIn(echo,HIGH);
     distance=duration*0.034/2;
-    Serial.print(distance);
-    Serial.println("cm");
+    Serial.println(distance);
     return(distance);
 }
 /*END*/

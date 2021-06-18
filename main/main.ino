@@ -4,16 +4,16 @@
 #include <math.h>
 const int line[]={2,3,4,5,6,7,8,9};
 const int column[]={10,11,12,13,A0,A1,A2,A3};
-//frame using flash memory
+//using flash memory
 const bool frame[8][40] PROGMEM={
     {0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-    {0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0},
-    {0,0,1,1,0,0,1,0,1,1,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,0,0,0,0},
-    {0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,0},
-    {0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0},
-    {0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0},
-    {0,0,1,0,0,0,1,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0}
+    {0,0,1,1,1,1,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0},
+    {0,0,1,0,1,1,1,0,1,1,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,1,1,0,0,1,0,0,0,1,0,0,0,0,0,0},
+    {0,0,1,0,0,1,1,0,0,1,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1,0,0,1,1,1,1,1,0,0,0,0,0,0},
+    {0,0,1,1,1,1,1,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0},
+    {0,0,1,1,1,1,1,0,0,1,0,0,0,1,1,1,1,1,0,1,1,1,1,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0},
+    {0,0,1,1,1,1,1,0,1,1,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0}
 };
 bool playground[8][8]={
     {0,0,0,0,0,0,0,0},
@@ -27,10 +27,8 @@ bool playground[8][8]={
 };
 double pos=0.0;
 int led_displayID=0;
-int bt_packageSize=0;
 int trig=A4;
 int echo=A5;
-SoftwareSerial bt(A4,A5);
 void def_display();
 //void bluetooth();
 void sec_display();
@@ -39,8 +37,6 @@ int distance;
 int supersonic_func1();
 void setup() {
     Serial.begin(9600);
-    //HC-05
-    //bt.begin(9600);
     pinMode(trig,OUTPUT);
     pinMode(echo,INPUT);
 	for(int i=0;i<8;i++){
@@ -59,7 +55,7 @@ void loop() {
         case 1:
             //bluetooth();
             sec_display();
-            delay(200);
+            delay(2);
             break;
         default:
             break;
@@ -68,19 +64,23 @@ void loop() {
 void def_display(){
     for(int l=0;l<8;l++){
         for(int c=0;c<8;c++){
-            static int frame_buf=pgm_read_byte_near(&frame[c][l+(int)(floor(pos))]);
+            int frame_buf=pgm_read_byte_near(&frame[c][l+(int)(floor(pos))]);
+            Serial.print(frame_buf);
+            Serial.print(" ");
             if(frame_buf==1){
                 digitalWrite(line[l],HIGH);
                 digitalWrite(column[c],LOW);
-                delay(2);
+                delay(1);
                 digitalWrite(line[l],LOW);
                 digitalWrite(column[c],HIGH);
             }else if(frame_buf==0){
-                delay(2);
+                delay(1);
             }
             pos+=0.02;
         }
+        Serial.println("");
     }
+    Serial.println("--------------------");
     if(pos>=39.0){
         pos=0.0;
         led_displayID=1;
@@ -94,17 +94,17 @@ void def_display(){
 void sec_display(){
     for(int l=0;l<8;l++){
         for(int c=0;c<8;c++){
-            static int buffer=playground[c][l];
+            int buffer=playground[c][l];
             switch (buffer){
                 case 1:
                     digitalWrite(line[l],HIGH);
                     digitalWrite(column[c],LOW);
-                    delay(2);
+                    delay(1);
                     digitalWrite(line[l],LOW);
                     digitalWrite(column[c],HIGH);
                     break;
                 case 0:
-                    delay(2)
+                    delay(1);
                     break;
                 default:
                     break;
@@ -119,7 +119,7 @@ void sec_display(){
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             if(j<7){
-                playground[i][j]=playground[i][j+1]
+                playground[i][j]=playground[i][j+1];
             }
         }
         if((8-i)<=display_bar){

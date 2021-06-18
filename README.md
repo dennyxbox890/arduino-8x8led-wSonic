@@ -1,2 +1,2 @@
-# arduino-8x8led-wSonic
+# arduino-thingy-sch-pr
 arduino school project

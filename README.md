@@ -1,2 +1,2 @@
-# arduino-thingy-sch-pr
-arduino school project
+# arduino-8x8led-wSonic
+using 8x8 LED Matrix

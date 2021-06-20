@@ -70,11 +70,11 @@ void def_display(){
             if(frame_buf==1){
                 digitalWrite(line[l],HIGH);
                 digitalWrite(column[c],LOW);
-                delay(1);
+                delay(2);
                 digitalWrite(line[l],LOW);
                 digitalWrite(column[c],HIGH);
             }else if(frame_buf==0){
-                delay(1);
+                delay(0);
             }
             pos+=0.02;
         }
@@ -119,13 +119,13 @@ void sec_display(){
     for(int i=0;i<8;i++){
         for(int j=0;j<8;j++){
             if(j<7){
-                playground[i][j]=playground[i][j+1];
+                playground[i][j]=playground[i+1][j];
             }
         }
         if((8-i)<=display_bar){
-            playground[i][7]=1;
-        }else{
-            playground[i][7]=0;
+            playground[7][i]=1;
+        }else if((8-i)>display_bar){
+            playground[7][i]=0;
         }
     }
 }

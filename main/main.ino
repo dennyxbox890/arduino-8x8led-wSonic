@@ -55,7 +55,6 @@ void loop() {
         case 1:
             //bluetooth();
             sec_display();
-            delay(2);
             break;
         default:
             break;
@@ -136,7 +135,7 @@ int supersonic_func1(){
     delayMicroseconds(10);
     digitalWrite(trig,LOW);
     /*
-    v=340 m/s
+    v=340 m/s =0.034 µ/s
     t=s/v
     s=t*0.034/2
     */
